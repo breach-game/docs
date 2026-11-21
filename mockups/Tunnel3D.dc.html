@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>BREACH · Mission 6, exfiltration en 3D</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#05060B}
+a{color:#2DE2FF}a:hover{color:#8FF0FF}
+.scan{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 3px)}
+.ringx{position:absolute;left:0;top:0;width:820px;height:500px;margin:-250px 0 0 -410px;box-sizing:border-box;border-radius:28px;animation:fly 6.4s linear infinite}
+@keyframes fly{0%{transform:translateZ(-3200px);opacity:0}12%{opacity:1}100%{transform:translateZ(700px);opacity:0}}
+.pk{position:absolute;left:0;top:0;animation:away 4.8s cubic-bezier(.3,0,.7,1) infinite}
+@keyframes away{0%{transform:translate3d(var(--x),var(--y),500px);opacity:0}10%{opacity:1}85%{opacity:1}100%{transform:translate3d(0px,0px,-3000px);opacity:0}}
+.blink{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0.25}}
+.core{animation:core 1.6s ease-in-out infinite}
+@keyframes core{0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.85}50%{transform:translate(-50%,-50%) scale(1.25);opacity:1}}
+.edge{animation:edge 1.4s ease-in-out infinite}
+@keyframes edge{0%,100%{opacity:0.35}50%{opacity:0.8}}
+@media (prefers-reduced-motion: reduce){.ringx,.pk,.blink,.core,.edge{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 900px; overflow: hidden; background: #05060B; color: #D7E0F5; font-family: Inter, sans-serif">
+
+  <div style="position: absolute; inset: 0; perspective: 900px; perspective-origin: 720px 430px">
+    <div style="position: absolute; left: 720px; top: 430px; transform-style: preserve-3d">
+      <sc-for list="{{rings}}" as="r" hint-placeholder-count="16">
+        <div class="ringx" style="{{r.style}}"></div>
+      </sc-for>
+      <sc-for list="{{packets}}" as="p" hint-placeholder-count="8">
+        <div class="pk" style="{{p.style}}">
+          <div style="transform: translate(-50%, -50%); padding: 8px 12px; border-radius: 8px; background: rgba(255,61,90,0.16); border: 1px solid #FF3D5A; box-shadow: 0 0 24px rgba(255,61,90,0.55); white-space: nowrap; font: 500 13px 'JetBrains Mono', monospace; color: #FFFFFF">{{p.label}}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div class="core" style="position: absolute; left: 720px; top: 430px; width: 46px; height: 46px; border-radius: 50%; background: #FF3D5A; box-shadow: 0 0 40px 12px rgba(255,61,90,0.7), 0 0 140px 50px rgba(255,61,90,0.25)"></div>
+  <div style="position: absolute; left: 720px; top: 472px; transform: translateX(-50%); font: 500 12px 'JetBrains Mono', monospace; color: #FF8FA0; letter-spacing: 0.1em">exfil.mute.example</div>
+
+  <div class="edge" style="position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 120px 20px rgba(255,61,90,0.45)"></div>
+
+  <header style="position: absolute; left: 32px; top: 28px; display: flex; flex-direction: column; gap: 6px">
+    <div style="font: 500 12px 'JetBrains Mono', monospace; letter-spacing: 0.24em; color: #FF8FA0">MISSION 06 · SUR LES TRACES DE MUTE</div>
+    <h1 style="margin: 0; font: 700 34px 'Space Grotesk', sans-serif; color: #FFFFFF">Les données quittent NovaMind</h1>
+  </header>
+  <div class="blink" style="position: absolute; right: 32px; top: 34px; display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 10px; border: 1px solid #FF3D5A; background: rgba(255,61,90,0.14); font: 700 13px 'JetBrains Mono', monospace; letter-spacing: 0.14em; color: #FFFFFF">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FF3D5A" stroke-width="2.5" aria-hidden="true"><path d="M12 3l9 16H3z"/><path d="M12 10v4"/><path d="M12 17v.5"/></svg>
+    EXFILTRATION EN COURS
+  </div>
+
+  <section style="position: absolute; left: 32px; bottom: 32px; width: 460px; padding: 14px 16px; box-sizing: border-box; border-radius: 10px; background: rgba(14,19,32,0.86); border: 1px solid rgba(61,255,154,0.22); font: 400 12.5px/1.65 'JetBrains Mono', monospace; color: #C3CCE0">
+    <div style="color: #7D8BAA; margin-bottom: 6px">ada@lignerouge:~$ tail -f /var/log/egress.log</div>
+    <div>23:58:02 db → exfil.mute.example <span style="color: #FF8FA0">rdv_cliniques.csv</span></div>
+    <div>23:58:04 db → exfil.mute.example <span style="color: #FF8FA0">clients_2026.sql</span></div>
+    <div>23:58:07 db → exfil.mute.example <span style="color: #FF8FA0">factures_q3.zip</span></div>
+    <div style="color: #FFB020">23:58:09 débit sortant anormal · aucune règle déclenchée</div>
+  </section>
+
+  <section style="position: absolute; left: 520px; right: 520px; bottom: 32px; display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; justify-content: space-between; font: 500 12px 'JetBrains Mono', monospace; color: #9FB0CC"><span>TRANSFERT</span><span style="color: #FF8FA0">38 %</span></div>
+    <div style="height: 8px; border-radius: 4px; background: rgba(255,61,90,0.15); overflow: hidden"><div style="width: 38%; height: 8px; background: #FF3D5A; box-shadow: 0 0 14px #FF3D5A"></div></div>
+    <div style="text-align: center; font: 700 40px 'Space Grotesk', sans-serif; color: #FFFFFF; letter-spacing: 0.06em">01:29</div>
+  </section>
+
+  <section style="position: absolute; right: 32px; bottom: 32px; width: 420px; padding: 16px; box-sizing: border-box; border-radius: 10px; background: rgba(14,19,32,0.88); border: 1px solid rgba(45,226,255,0.3); display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; gap: 10px">
+      <div style="flex: none; width: 32px; height: 32px; border-radius: 8px; background: rgba(255,61,90,0.18); border: 1px solid #FF3D5A; display: flex; align-items: center; justify-content: center; font: 700 13px 'Space Grotesk', sans-serif; color: #FF8FA0">A</div>
+      <div style="font-size: 13px; line-height: 1.5"><div style="font: 400 11px 'JetBrains Mono', monospace; color: #7D8BAA">ADA · 23:58</div>Ce n'est plus un exercice. Coupe la route sortante de db avant la fin du transfert, on documentera après.</div>
+    </div>
+    <button type="button" style="height: 48px; border-radius: 8px; border: 1px solid #2DE2FF; background: rgba(45,226,255,0.18); color: #FFFFFF; font: 600 14px Inter, sans-serif; box-shadow: 0 0 22px rgba(45,226,255,0.35)">Isoler db.novamind.test</button>
+  </section>
+
+  <div class="scan"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const n = 16, dur = 6.4;
+    const rings = Array.from({ length: n }, (_, i) => {
+      const red = i % 4 === 0;
+      const c = red ? 'rgba(255,61,90,0.75)' : 'rgba(45,226,255,0.45)';
+      return { style: 'border: 2px solid ' + c + '; box-shadow: 0 0 24px ' + c + ', inset 0 0 24px ' + c + '; animation-delay: -' + (i * dur / n).toFixed(2) + 's' };
+    });
+    const files = ['rdv_cliniques.csv', 'clients_2026.sql', 'factures_q3.zip', 'dossiers_animaux.json', 'contrats_rh.pdf', 'backup_crm.tar', 'cles_api.env', 'emails_support.mbox'];
+    const spots = [[-300, -150], [280, -170], [-340, 120], [320, 140], [-120, -200], [140, 200], [-420, -20], [400, -40]];
+    const packets = files.map((f, i) => ({
+      label: f,
+      style: '--x: ' + spots[i][0] + 'px; --y: ' + spots[i][1] + 'px; animation-delay: -' + (i * 0.6).toFixed(1) + 's'
+    }));
+    return { rings, packets };
+  }
+}
+</script>
+</body>
+</html>

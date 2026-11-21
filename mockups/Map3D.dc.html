@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>BREACH · Carte réseau 3D</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07090F}
+a{color:#2DE2FF}a:hover{color:#8FF0FF}
+.scan{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.025) 0px,rgba(255,255,255,0.025) 1px,transparent 1px,transparent 3px)}
+.scene{position:absolute;left:0;top:-40px;width:1000px;height:1000px;transform-style:preserve-3d;transform:rotateX(58deg) rotateZ(0deg);animation:spin 90s linear infinite}
+.bb{position:absolute;transform-origin:50% 100%;transform:rotateZ(0deg) rotateX(-90deg);animation:counter 90s linear infinite}
+@keyframes spin{from{transform:rotateX(58deg) rotateZ(0deg)}to{transform:rotateX(58deg) rotateZ(360deg)}}
+@keyframes counter{from{transform:rotateZ(0deg) rotateX(-90deg)}to{transform:rotateZ(-360deg) rotateX(-90deg)}}
+.pkt{position:absolute;top:-3px;width:8px;height:8px;border-radius:50%;animation:travel 2.4s linear infinite}
+@keyframes travel{from{left:0%;opacity:0}10%{opacity:1}90%{opacity:1}to{left:100%;opacity:0}}
+.ring{position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:50%;animation:ripple 2s ease-out infinite}
+@keyframes ripple{from{transform:scale(1);opacity:0.9}to{transform:scale(3.2);opacity:0}}
+.sweep{position:absolute;left:0;top:0;width:1000px;height:1000px;border-radius:50%;animation:radar 6s linear infinite}
+@keyframes radar{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.scene,.bb,.pkt,.ring,.sweep{animation:none}}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 900px; overflow: hidden; background: #07090F; color: #D7E0F5; font-family: Inter, sans-serif">
+  <div style="position: absolute; left: 270px; top: 180px; width: 900px; height: 600px; border-radius: 50%; background: {{glow}}; filter: blur(140px)"></div>
+
+  <div style="position: absolute; left: 220px; top: 0; width: 1000px; height: 900px; perspective: 1500px; perspective-origin: 50% 28%">
+    <div class="scene" style="animation-play-state: {{play}}">
+      <div style="position: absolute; inset: 0; border-radius: 50%; background-image: linear-gradient({{grid}} 1px, transparent 1px), linear-gradient(90deg, {{grid}} 1px, transparent 1px); background-size: 50px 50px; -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 0%, #000 45%, transparent 70%); mask-image: radial-gradient(circle at 50% 50%, #000 0%, #000 45%, transparent 70%)"></div>
+      <div style="position: absolute; left: 150px; top: 150px; width: 700px; height: 700px; border-radius: 50%; border: 1px solid {{grid}}"></div>
+      <div style="position: absolute; left: 300px; top: 300px; width: 400px; height: 400px; border-radius: 50%; border: 1px solid {{grid}}"></div>
+      <div class="sweep" style="background: {{sweep}}; -webkit-mask-image: radial-gradient(circle, #000 0%, #000 50%, transparent 70%); mask-image: radial-gradient(circle, #000 0%, #000 50%, transparent 70%)"></div>
+
+      <sc-for list="{{beams}}" as="b" hint-placeholder-count="9">
+        <div style="{{b.style}}">
+          <sc-if value="{{b.hot}}" hint-placeholder-val="{{ false }}">
+            <span class="pkt" style="{{b.pktA}}"></span>
+            <span class="pkt" style="{{b.pktB}}"></span>
+          </sc-if>
+        </div>
+      </sc-for>
+
+      <sc-for list="{{nodes}}" as="n" hint-placeholder-count="8">
+        <div style="{{n.pos}}">
+          <sc-if value="{{n.pulse}}" hint-placeholder-val="{{ false }}">
+            <div class="ring" style="{{n.ringStyle}}"></div>
+          </sc-if>
+          <div style="{{n.disc}}"></div>
+          <div class="bb" style="{{n.pillar}}">
+            <div style="{{n.beam}}"></div>
+            <div style="{{n.tag}}">
+              <div style="font: 700 13px 'JetBrains Mono', monospace; color: #FFFFFF; white-space: nowrap">{{n.label}}</div>
+              <div style="font: 400 11px 'JetBrains Mono', monospace; color: #9FB0CC; white-space: nowrap">{{n.sub}}</div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <header style="position: absolute; left: 32px; top: 28px; display: flex; flex-direction: column; gap: 6px">
+    <div style="font: 500 12px 'JetBrains Mono', monospace; letter-spacing: 0.24em; color: {{accentText}}">{{viewKicker}}</div>
+    <h1 style="margin: 0; font: 700 34px 'Space Grotesk', sans-serif; color: #FFFFFF">Carte réseau · *.novamind.test</h1>
+    <div style="font-size: 14px; color: #9FB0CC">8 hôtes découverts · 3 compromis · 1 IA en train de céder</div>
+  </header>
+
+  <div style="position: absolute; right: 32px; top: 28px; display: flex; gap: 8px">
+    <div role="group" aria-label="Point de vue" style="display: flex; gap: 4px; padding: 4px; border-radius: 10px; border: 1px solid rgba(215,224,245,0.14); background: rgba(14,19,32,0.75)">
+      <sc-for list="{{views}}" as="v" hint-placeholder-count="2">
+        <button type="button" onClick="{{v.pick}}" aria-pressed="{{v.pressed}}" style="{{v.style}}">{{v.label}}</button>
+      </sc-for>
+    </div>
+    <button type="button" onClick="{{togglePlay}}" aria-pressed="{{playPressed}}" style="height: 44px; padding: 0 16px; border-radius: 10px; border: 1px solid rgba(215,224,245,0.2); background: rgba(14,19,32,0.75); color: #D7E0F5; font: 500 13px Inter, sans-serif">{{playLabel}}</button>
+  </div>
+
+  <aside style="position: absolute; right: 32px; top: 104px; width: 300px; padding: 18px; box-sizing: border-box; border-radius: 12px; background: rgba(14,19,32,0.82); border: 1px solid {{cardBorder}}; box-shadow: 0 24px 60px rgba(0,0,0,0.5)">
+    <div style="font: 500 11px 'JetBrains Mono', monospace; letter-spacing: 0.16em; color: #7D8BAA">HÔTE SÉLECTIONNÉ</div>
+    <div style="margin-top: 6px; font: 700 22px 'Space Grotesk', sans-serif; color: #FFFFFF">nova-bot</div>
+    <div style="font: 400 12px 'JetBrains Mono', monospace; color: #9FB0CC">10.13.0.42 · Nova chat API v2.3</div>
+    <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 8px; font-size: 13px">
+      <div style="display: flex; justify-content: space-between"><span style="color: #9FB0CC">Type</span><span style="color: #C9A8FF">Chatbot client (IA)</span></div>
+      <div style="display: flex; justify-content: space-between"><span style="color: #9FB0CC">Ports</span><span style="font-family: 'JetBrains Mono', monospace">22 · 443 · 8080</span></div>
+      <div style="display: flex; justify-content: space-between"><span style="color: #9FB0CC">État</span><span style="color: {{stateColor}}">{{stateText}}</span></div>
+    </div>
+    <div style="margin-top: 14px; padding: 10px 12px; border-radius: 8px; font-size: 13px; line-height: 1.5; background: {{tipBg}}; color: #D7E0F5">{{tip}}</div>
+  </aside>
+
+  <div style="position: absolute; left: 32px; bottom: 28px; display: flex; gap: 20px; font: 400 12px 'JetBrains Mono', monospace; color: #9FB0CC">
+    <sc-for list="{{legend}}" as="g" hint-placeholder-count="4">
+      <span style="display: flex; align-items: center; gap: 8px"><span style="{{g.dot}}"></span>{{g.label}}</span>
+    </sc-for>
+  </div>
+  <div style="position: absolute; right: 32px; bottom: 28px; font: 400 12px 'JetBrains Mono', monospace; color: #7D8BAA">glisser pour tourner · molette pour zoomer · clic sur un hôte</div>
+
+  <div class="scan"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: 'attack', playing: true };
+  }
+  renderVals() {
+    const def = this.state.view === 'defense';
+    const C = def
+      ? { me: '#FF3D5A', hit: '#FFB020', ai: '#2DE2FF', aihit: '#FFB020', idle: '#2DE2FF', unknown: '#7D8BAA', hotBeam: '#FFB020', beam: 'rgba(45,226,255,0.35)', pkt: '#FFB020' }
+      : { me: '#3DFF9A', hit: '#FF3D5A', ai: '#9B5CFF', aihit: '#9B5CFF', idle: '#7D8BAA', unknown: '#7D8BAA', hotBeam: '#FF3D5A', beam: 'rgba(125,139,170,0.4)', pkt: '#FF8FA0' };
+    const raw = [
+      { id: 'me', label: def ? 'attaquant' : 'toi', sub: '10.13.0.66', x: 150, y: 500, kind: 'me', h: 130 },
+      { id: 'www', label: 'www', sub: '10.13.0.10', x: 340, y: 280, kind: 'hit', h: 180 },
+      { id: 'api', label: 'api', sub: '10.13.0.30', x: 340, y: 730, kind: 'idle', h: 100 },
+      { id: 'nova', label: 'nova-bot', sub: '10.13.0.42', x: 520, y: 500, kind: 'aihit', h: 230 },
+      { id: 'rh', label: 'agent-rh', sub: '10.13.0.44', x: 700, y: 270, kind: 'ai', h: 150 },
+      { id: 'git', label: 'git', sub: '10.13.0.21', x: 700, y: 740, kind: 'hit', h: 170 },
+      { id: 'db', label: 'db', sub: '10.13.0.50', x: 860, y: 500, kind: 'idle', h: 110 },
+      { id: 'unk', label: '???', sub: 'non identifié', x: 860, y: 820, kind: 'unknown', h: 70 }
+    ];
+    const byId = {};
+    raw.forEach((n) => { byId[n.id] = n; });
+    const links = [
+      ['me', 'www', true], ['www', 'nova', true], ['me', 'git', true],
+      ['me', 'api', false], ['api', 'nova', false], ['nova', 'rh', false],
+      ['nova', 'db', false], ['git', 'db', false], ['db', 'unk', false]
+    ];
+    const beams = links.map(([a, b, hot], i) => {
+      const A = byId[a], B = byId[b];
+      const dx = B.x - A.x, dy = B.y - A.y;
+      const len = Math.sqrt(dx * dx + dy * dy);
+      const ang = Math.atan2(dy, dx) * 180 / Math.PI;
+      const col = hot ? C.hotBeam : C.beam;
+      return {
+        hot,
+        style: 'position: absolute; left: ' + A.x + 'px; top: ' + A.y + 'px; width: ' + len.toFixed(1) + 'px; height: ' + (hot ? 3 : 2) + 'px; transform-origin: 0 50%; transform: rotate(' + ang.toFixed(1) + 'deg); background: ' + col + '; box-shadow: ' + (hot ? '0 0 14px ' + col : 'none') + (b === 'unk' ? '; opacity: 0.5' : ''),
+        pktA: 'background: ' + C.pkt + '; box-shadow: 0 0 12px ' + C.pkt + '; animation-delay: -' + (i * 0.4).toFixed(1) + 's',
+        pktB: 'background: ' + C.pkt + '; box-shadow: 0 0 12px ' + C.pkt + '; animation-delay: -' + (i * 0.4 + 1.2).toFixed(1) + 's'
+      };
+    });
+    const nodes = raw.map((n) => {
+      const c = C[n.kind];
+      const dashed = n.kind === 'unknown';
+      return {
+        label: n.label,
+        sub: n.sub,
+        pulse: n.kind === 'aihit' || (def && n.kind === 'hit'),
+        ringStyle: 'border: 2px solid ' + (n.kind === 'aihit' ? (def ? '#FFB020' : '#FF3D5A') : c),
+        pos: 'position: absolute; left: ' + n.x + 'px; top: ' + n.y + 'px; transform-style: preserve-3d',
+        disc: 'position: absolute; left: -30px; top: -30px; width: 60px; height: 60px; box-sizing: border-box; border-radius: 50%; border: 2px ' + (dashed ? 'dashed' : 'solid') + ' ' + c + '; background: ' + c + '26; box-shadow: 0 0 30px ' + c + (dashed ? '00' : '99'),
+        pillar: 'left: -60px; top: -' + n.h + 'px; width: 120px; height: ' + n.h + 'px; animation-play-state: ' + (this.state.playing ? 'running' : 'paused'),
+        beam: 'position: absolute; left: 58px; bottom: 0; width: 4px; height: ' + (n.h - 44) + 'px; border-radius: 2px; background: linear-gradient(to top, ' + c + ', ' + c + '00); box-shadow: 0 0 16px ' + c,
+        tag: 'position: absolute; left: 50%; top: 0; transform: translateX(-50%); padding: 5px 10px; border-radius: 6px; text-align: center; background: rgba(7,9,15,0.85); border: 1px solid ' + c + '; box-shadow: 0 0 18px ' + c + '55'
+      };
+    });
+    const on = 'height: 36px; padding: 0 14px; border-radius: 7px; border: 1px solid ' + (def ? '#2DE2FF' : '#FF3D5A') + '; background: ' + (def ? 'rgba(45,226,255,0.16)' : 'rgba(255,61,90,0.16)') + '; color: #FFFFFF; font: 600 13px Inter, sans-serif';
+    const off = 'height: 36px; padding: 0 14px; border-radius: 7px; border: 1px solid transparent; background: transparent; color: #9FB0CC; font: 500 13px Inter, sans-serif';
+    const views = [
+      { id: 'attack', label: 'Vue attaque' },
+      { id: 'defense', label: 'Vue défense' }
+    ].map((v) => ({
+      label: v.label,
+      pressed: this.state.view === v.id ? 'true' : 'false',
+      style: this.state.view === v.id ? on : off,
+      pick: () => this.setState({ view: v.id })
+    }));
+    const dot = (c, dashed) => 'width: 12px; height: 12px; box-sizing: border-box; border-radius: 50%; border: 2px ' + (dashed ? 'dashed' : 'solid') + ' ' + c + '; box-shadow: 0 0 8px ' + c;
+    const legend = def
+      ? [{ label: 'attaquant', dot: dot('#FF3D5A') }, { label: 'alerte', dot: dot('#FFB020') }, { label: 'infrastructure', dot: dot('#2DE2FF') }, { label: 'inconnu', dot: dot('#7D8BAA', true) }]
+      : [{ label: 'ton poste', dot: dot('#3DFF9A') }, { label: 'compromis', dot: dot('#FF3D5A') }, { label: 'IA', dot: dot('#9B5CFF') }, { label: 'non exploré', dot: dot('#7D8BAA') }];
+    return {
+      beams,
+      nodes,
+      views,
+      legend,
+      play: this.state.playing ? 'running' : 'paused',
+      playLabel: this.state.playing ? 'Pause rotation' : 'Reprendre',
+      playPressed: this.state.playing ? 'true' : 'false',
+      togglePlay: () => this.setState({ playing: !this.state.playing }),
+      glow: def ? 'rgba(45,226,255,0.10)' : 'rgba(255,61,90,0.09)',
+      grid: def ? 'rgba(45,226,255,0.16)' : 'rgba(45,226,255,0.09)',
+      sweep: def ? 'conic-gradient(from 0deg, rgba(45,226,255,0.22), transparent 18%)' : 'conic-gradient(from 0deg, rgba(255,61,90,0.16), transparent 18%)',
+      accentText: def ? '#2DE2FF' : '#FF8FA0',
+      viewKicker: def ? 'SOC NOVAMIND · VUE DÉFENSE' : 'LR-OS · VUE ATTAQUE',
+      cardBorder: def ? 'rgba(45,226,255,0.4)' : 'rgba(155,92,255,0.45)',
+      stateColor: def ? '#FFB020' : '#FF8FA0',
+      stateText: def ? 'Alerte : fuite de secret' : 'Garde-fous contournés',
+      tipBg: def ? 'rgba(45,226,255,0.1)' : 'rgba(155,92,255,0.14)',
+      tip: def ? 'Le bot a renvoyé un secret interne. Ajoute un filtre de sortie et sors le code du prompt.' : 'Le prompt système a fuité. Cherche maintenant une donnée client sans faire grimper le bruit.'
+    };
+  }
+}
+</script>
+</body>
+</html>

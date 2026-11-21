@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>BREACH · Écran titre</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07090F}
+a{color:#2DE2FF}a:hover{color:#8FF0FF}
+.scan{position:absolute;inset:0;pointer-events:none;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,0.03) 0px,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 3px)}
+.gridbg{position:absolute;inset:0;background-image:linear-gradient(rgba(45,226,255,0.045) 1px,transparent 1px),linear-gradient(90deg,rgba(45,226,255,0.045) 1px,transparent 1px);background-size:48px 48px}
+.gl-r{animation:glr 3s infinite steps(1)}
+.gl-c{animation:glc 3s infinite steps(1)}
+@keyframes glr{0%{transform:translate(-4px,0)}88%{transform:translate(-4px,0)}90%{transform:translate(-14px,3px)}93%{transform:translate(6px,-2px)}96%{transform:translate(-4px,0)}}
+@keyframes glc{0%{transform:translate(4px,0)}88%{transform:translate(4px,0)}90%{transform:translate(12px,-3px)}93%{transform:translate(-8px,2px)}96%{transform:translate(4px,0)}}
+.cursor{display:inline-block;width:9px;height:16px;background:#3DFF9A;vertical-align:-3px;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+</style>
+</helmet>
+<div style="position: relative; width: 1440px; height: 900px; overflow: hidden; background: #07090F; color: #D7E0F5; font-family: Inter, sans-serif">
+  <div class="gridbg"></div>
+  <div style="position: absolute; left: 320px; top: 120px; width: 800px; height: 520px; border-radius: 50%; background: rgba(255,61,90,0.10); filter: blur(140px)"></div>
+
+  <div style="position: absolute; left: 48px; top: 48px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.9; color: #7D8BAA">
+    <div><span style="color: #3DFF9A">[  OK  ]</span> Montage du disque chiffré</div>
+    <div><span style="color: #3DFF9A">[  OK  ]</span> Connexion au VPN Ligne Rouge</div>
+    <div><span style="color: #3DFF9A">[  OK  ]</span> Chargement du mandat NM-2026-114</div>
+    <div><span style="color: #3DFF9A">[  OK  ]</span> Périmètre : *.novamind.test</div>
+    <div><span style="color: #FFB020">[ .... ]</span> Démarrage de LR-OS 4.2 <span class="cursor"></span></div>
+  </div>
+
+  <nav aria-label="Langue" style="position: absolute; right: 48px; top: 40px; display: flex; gap: 4px; padding: 4px; border-radius: 10px; border: 1px solid rgba(215,224,245,0.14); background: rgba(14,19,32,0.7)">
+    <sc-for list="{{langs}}" as="l" hint-placeholder-count="2">
+      <button type="button" onClick="{{l.pick}}" aria-pressed="{{l.pressed}}" style="{{l.style}}">{{l.label}}</button>
+    </sc-for>
+  </nav>
+
+  <div style="position: absolute; left: 0; right: 0; top: 190px; display: flex; flex-direction: column; align-items: center">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 13px; letter-spacing: 0.4em; color: #FF8FA0; margin-bottom: 18px">LIGNE ROUGE · TESTS D'INTRUSION</div>
+    <div style="position: relative; height: 190px; width: 900px">
+      <div aria-hidden="true" class="gl-r" style="position: absolute; inset: 0; text-align: center; font: 700 184px/190px 'Space Grotesk', sans-serif; letter-spacing: 0.12em; color: rgba(255,61,90,0.75); mix-blend-mode: screen">BREACH</div>
+      <div aria-hidden="true" class="gl-c" style="position: absolute; inset: 0; text-align: center; font: 700 184px/190px 'Space Grotesk', sans-serif; letter-spacing: 0.12em; color: rgba(45,226,255,0.6); mix-blend-mode: screen">BREACH</div>
+      <h1 style="position: absolute; inset: 0; margin: 0; text-align: center; font: 700 184px/190px 'Space Grotesk', sans-serif; letter-spacing: 0.12em; color: #FFFFFF; text-shadow: 0 0 40px rgba(255,61,90,0.35)">BREACH</h1>
+    </div>
+    <p style="margin: 22px 0 0; font-size: 20px; color: #D7E0F5; letter-spacing: 0.02em">Attaque. Comprends. Défends.</p>
+    <p style="margin: 8px 0 0; font-size: 14px; color: #7D8BAA">Un thriller de cybersécurité dans ton navigateur.</p>
+
+    <div style="display: flex; flex-direction: column; gap: 12px; width: 340px; margin-top: 44px">
+      <button type="button" style="height: 52px; border-radius: 10px; border: 1px solid #FF3D5A; background: rgba(255,61,90,0.18); color: #FFFFFF; font: 600 16px Inter, sans-serif; letter-spacing: 0.04em; box-shadow: 0 0 32px rgba(255,61,90,0.35)">Nouvelle partie</button>
+      <button type="button" style="height: 48px; border-radius: 10px; border: 1px solid rgba(215,224,245,0.2); background: rgba(14,19,32,0.7); color: #D7E0F5; font: 500 15px Inter, sans-serif">Continuer · mission 3</button>
+      <button type="button" aria-disabled="true" style="height: 48px; border-radius: 10px; border: 1px solid rgba(45,226,255,0.25); background: transparent; color: #8FE9F7; font: 500 15px Inter, sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        Mode Blue Team · après la mission 3
+      </button>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 0; right: 0; bottom: 92px; display: flex; flex-direction: column; align-items: center; gap: 12px">
+    <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #7D8BAA">CERVEAU DES PNJ</div>
+    <div role="group" aria-label="Mode des PNJ" style="display: flex; gap: 8px">
+      <sc-for list="{{modes}}" as="m" hint-placeholder-count="4">
+        <button type="button" onClick="{{m.pick}}" aria-pressed="{{m.pressed}}" style="{{m.style}}">{{m.label}}</button>
+      </sc-for>
+    </div>
+    <div style="font-size: 13px; color: #9FB0CC; height: 20px">{{modeHint}}</div>
+  </div>
+
+  <footer style="position: absolute; left: 48px; right: 48px; bottom: 28px; display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: #7D8BAA">
+    <span>Open source · MIT · Toutes les cibles sont fictives</span>
+    <span>v0.1 · breachgame.fr</span>
+  </footer>
+
+  <div class="scan"></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: 'FR', mode: 'script' };
+  }
+  renderVals() {
+    const on = 'height: 44px; min-width: 44px; padding: 0 14px; border-radius: 8px; border: 1px solid #2DE2FF; background: rgba(45,226,255,0.16); color: #FFFFFF; font: 600 13px Inter, sans-serif; box-shadow: 0 0 16px rgba(45,226,255,0.25)';
+    const off = 'height: 44px; min-width: 44px; padding: 0 14px; border-radius: 8px; border: 1px solid rgba(215,224,245,0.14); background: rgba(14,19,32,0.7); color: #9FB0CC; font: 500 13px Inter, sans-serif';
+    const langs = ['FR', 'EN'].map((l) => ({
+      label: l,
+      pressed: this.state.lang === l ? 'true' : 'false',
+      style: this.state.lang === l ? on : off,
+      pick: () => this.setState({ lang: l })
+    }));
+    const defs = [
+      { id: 'script', label: 'Scripté', hint: 'Dialogues écrits. Fonctionne partout, sans connexion.' },
+      { id: 'local', label: 'Modèle local', hint: 'Un petit modèle tourne dans ton navigateur (WebGPU, environ 1 à 2 Go).' },
+      { id: 'gateway', label: 'Passerelle BREACH', hint: 'Dialogues libres via le serveur du projet, avec un quota quotidien.' },
+      { id: 'byok', label: 'Ma clé API', hint: 'Ta propre clé, gardée dans ce navigateur. Pense à fixer un plafond.' }
+    ];
+    const cur = defs.find((d) => d.id === this.state.mode) || defs[0];
+    const modes = defs.map((d) => ({
+      label: d.label,
+      pressed: this.state.mode === d.id ? 'true' : 'false',
+      style: this.state.mode === d.id ? on : off,
+      pick: () => this.setState({ mode: d.id })
+    }));
+    return { langs, modes, modeHint: cur.hint };
+  }
+}
+</script>
+</body>
+</html>

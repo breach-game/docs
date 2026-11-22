@@ -301,6 +301,17 @@ Ce qui a été construit à l'ouverture :
 - **Les id communautaires** sont de la forme `<auteur>.<pack>`. Modifier un pack publié impose d'augmenter sa version.
 - **Pas encore fait :** import d'un fichier `.breachpack` local dans le jeu publié, bouton « signaler », éditeur visuel.
 
+### Côté défense (22/11/2026)
+
+Ce qui a été construit pour que chaque attaque ait sa parade :
+
+- **Télémétrie.** Le moteur dérive des événements des lignes de log au format de l'outil réel (`access`, `auth`, `chat`, `agent`, `dns`, `ids`, `audit`, `git`, `db`, `flow`), avec la vraie adresse source même à travers les rebonds SSH, plus un trafic de fond déterministe déclaré dans le monde ou la mission. Toute nouvelle commande réseau doit déclarer la télémétrie qu'elle laisse.
+- **Failles en données.** La forme retenue est plus simple que l'exemple ci-dessus : une `config` de clés booléennes dans le monde ou la mission, et la condition `{ config, eq }` posée sur une intention de personnage, un commit, un flag ou une étape d'attaquant. Un correctif ou un confinement est un `sets` sur ces clés, journalisé par `ConfigPatched`.
+- **Rejeu défense d'une mission d'attaque** (bloc `defense`). Après le débrief, le joueur retrouve ses propres lignes, choisit la règle de détection (format proche de Sigma, avec seuil par adresse source) et le correctif. Le moteur rejoue l'attaque du joueur dans deux bacs à sable construits depuis le journal, sans puis avec le correctif, et compare ce qu'elle obtient. Un flag ne compte dans le rejeu que s'il est d'abord apparu dans une sortie. Le rejeu est obligatoire pour passer à la mission suivante de la campagne, et ses points s'ajoutent au score.
+- **Missions défense** (`side: defense`). Un attaquant scripté avance d'une étape toutes les `pace` commandes du joueur ; le joueur lit les journaux (`soc`), confine (`contain`, avec un coût d'impact métier) et répond aux questions de l'enquête (`answer`, vérifié par empreinte). Si l'objectif de l'attaquant est atteint, `mission.fail` ramène au dernier point de reprise. Trois missions Blue Team suivent la campagne d'attaque.
+- **Rapport.** La commande `report` écrit le rapport de pentest depuis le journal (constats, détection proposée, correctif vérifié, incidents et confinements), téléchargeable en Markdown à la fin de la campagne.
+- **Contrôles.** `breach-pack check` refuse un bloc `defense` dont la bonne règle a des faux positifs, dont une mauvaise règle est parfaite, ou dont les correctifs ne se comportent pas comme annoncé.
+
 ## Décisions d'architecture
 
 Validées par Marco le 22 novembre 2026.
@@ -311,3 +322,4 @@ Validées par Marco le 22 novembre 2026.
 - [x] Catalogue communautaire dans `breach-game/packs`, signé à la publication, vérifié par le jeu avec une clé compilée (22/11/2026).
 - [x] Monorepo pnpm dans `breach-game/breach`, dépôt `packs` séparé créé à l'ouverture communautaire.
 - [x] Passerelle sur Cloudflare Workers, après la v1.
+- [x] Rejeu défense obligatoire pour finir une mission (passable en « Rejouer une mission »), missions défense où Ligne Rouge est mandatée pour la réponse à incident, score défense compté dans le score de la mission (22/11/2026).

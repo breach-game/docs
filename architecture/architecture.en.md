@@ -303,6 +303,17 @@ What was built when the community opened:
 - **Community ids** are `<author>.<pack>`. Changing a published pack means raising its version.
 - **Not done yet:** importing a local `.breachpack` file in the published game, a "report" button, a visual editor.
 
+### Defence side (2026-11-22)
+
+What was built so that every attack has its counter:
+
+- **Telemetry.** The engine derives log lines from events, in the real tool's format (`access`, `auth`, `chat`, `agent`, `dns`, `ids`, `audit`, `git`, `db`, `flow`), with the true source address even through SSH hops, plus deterministic background traffic declared in the world or the mission. Every new network command must declare the telemetry it leaves.
+- **Weaknesses as data.** The chosen form is simpler than the example above: a `config` of keys in the world or the mission, and the condition `{ config, eq }` on a character's intent, a commit, a flag or an attacker step. A fix or a containment is a `sets` on those keys, logged as `ConfigPatched`.
+- **Defence replay of an attack mission** (`defense` block). After the debrief, the player finds their own lines, picks the detection rule (Sigma-like, with a per-source threshold) and the fix. The engine replays the player's attack in two sandboxes built from the journal, without and with the fix, and compares what it gains. A flag only counts in the replay if it first appeared in an output. The replay is required to move on in the campaign, and its points add to the score.
+- **Defence missions** (`side: defense`). A scripted attacker moves one step every `pace` player commands; the player reads logs (`soc`), contains (`contain`, with a business impact cost) and answers the investigation (`answer`, checked by hash). If the attacker reaches its goal, `mission.fail` sends the player back to the last checkpoint. Three Blue Team missions follow the attack campaign.
+- **Report.** The `report` command writes the pentest report from the journal (findings, proposed detection, verified fix, incidents and containment), downloadable as Markdown at the end of the campaign.
+- **Checks.** `breach-pack check` refuses a `defense` block whose correct rule has false positives, whose wrong rule is perfect, or whose fixes do not behave as stated.
+
 ## Architecture decisions
 
 Approved by Marco on November 22, 2026.
@@ -313,3 +324,4 @@ Approved by Marco on November 22, 2026.
 - [x] Community catalogue in `breach-game/packs`, signed at publication, checked by the game with a compiled-in key (2026-11-22).
 - [x] pnpm monorepo in `breach-game/breach`, separate `packs` repository created when the community opens up.
 - [x] Gateway on Cloudflare Workers, after v1.
+- [x] Defence replay required to finish a mission (skippable in "Replay a mission"), defence missions where Ligne Rouge holds the incident response contract, defence score counted in the mission score (2026-11-22).

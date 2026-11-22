@@ -293,6 +293,16 @@ v1 only contains missions 0 to 3, but adding a mission must not require any chan
 
 Official packs stay in the monorepo while the format keeps changing. The `breach-game/packs` repository will be created when the community opens up (v1.x). Nothing in the game depends on where packs are hosted: only the catalogue URL changes.
 
+### Community opening (2026-11-22)
+
+What was built when the community opened:
+
+- **`breach-game/packs`** holds one folder per community pack, the guide for authors (`CONTRIBUTING.md`) and two workflows. `check.yml` runs the game's own validator (`breach-pack check --community --with content`, from `breach-game/breach` main) on every pull request and every night: schema, safety rules, translations, replay of `solution.txt` in each declared language. `publish.yml` runs after a merge: it builds the `.breachpack` files and `index.json`, **signs `index.json`** (ECDSA P-256, key in the `BREACH_SIGNING_KEY` secret) and publishes data files only on GitHub Pages.
+- **The official packs stay in `breach`, pinned in the build.** Community packs never replace them: a community catalogue cannot list a `breach.*` id or a campaign.
+- **The game** lists community missions on its title screen, downloads the catalogue only then, checks its signature against a public key compiled into the build (also from cache), ignores a copy older than the last one seen, then checks each pack's SHA-256 and runs the schema and safety checks. A community mission is played on its own, with its own save, in the official NovaMind world or in a community world.
+- **Community ids** are `<author>.<pack>`. Changing a published pack means raising its version.
+- **Not done yet:** importing a local `.breachpack` file in the published game, a "report" button, a visual editor.
+
 ## Architecture decisions
 
 Approved by Marco on November 22, 2026.
@@ -300,5 +310,6 @@ Approved by Marco on November 22, 2026.
 - [x] Event log and deterministic engine as the foundation.
 - [x] 100% declarative content, no third-party code executed.
 - [x] Packs downloaded on demand from a static catalogue, reviewed through pull requests. The loading mechanism is in place from v1.
+- [x] Community catalogue in `breach-game/packs`, signed at publication, checked by the game with a compiled-in key (2026-11-22).
 - [x] pnpm monorepo in `breach-game/breach`, separate `packs` repository created when the community opens up.
 - [x] Gateway on Cloudflare Workers, after v1.

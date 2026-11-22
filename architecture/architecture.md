@@ -291,6 +291,16 @@ La v1 ne contient que les missions 0 à 3, mais ajouter une mission ne doit dema
 
 Les packs officiels restent dans le monorepo tant que le format bouge. Le dépôt `breach-game/packs` sera créé à l'ouverture communautaire (v1.x). Rien dans le jeu ne dépend de l'endroit où les packs sont hébergés : seule l'URL du catalogue change.
 
+### Ouverture communautaire (22/11/2026)
+
+Ce qui a été construit à l'ouverture :
+
+- **`breach-game/packs`** contient un dossier par pack communautaire, le guide des auteurs (`CONTRIBUTING.md`, en anglais) et deux workflows. `check.yml` lance le validateur du jeu lui-même (`breach-pack check --community --with content`, pris sur `main` de `breach-game/breach`) à chaque pull request et chaque nuit : schéma, règles de sécurité, traductions, rejeu de `solution.txt` dans chaque langue déclarée. `publish.yml` tourne après une fusion : il construit les `.breachpack` et `index.json`, **signe `index.json`** (ECDSA P-256, clé dans le secret `BREACH_SIGNING_KEY`) et ne publie que des fichiers de données sur GitHub Pages.
+- **Les packs officiels restent dans `breach`, épinglés au build.** Un pack communautaire ne les remplace jamais : un catalogue communautaire ne peut lister ni id `breach.*` ni campagne.
+- **Le jeu** liste les missions communautaires sur l'écran titre, ne télécharge le catalogue qu'à ce moment, vérifie sa signature avec une clé publique compilée dans le build (aussi depuis le cache), ignore une copie plus ancienne que la dernière vue, puis vérifie l'empreinte de chaque pack et applique le schéma et les contrôles de sécurité. Une mission communautaire se joue seule, avec sa propre sauvegarde, dans le monde officiel NovaMind ou dans un monde communautaire.
+- **Les id communautaires** sont de la forme `<auteur>.<pack>`. Modifier un pack publié impose d'augmenter sa version.
+- **Pas encore fait :** import d'un fichier `.breachpack` local dans le jeu publié, bouton « signaler », éditeur visuel.
+
 ## Décisions d'architecture
 
 Validées par Marco le 22 novembre 2026.
@@ -298,5 +308,6 @@ Validées par Marco le 22 novembre 2026.
 - [x] Journal d'événements et moteur déterministe comme fondation.
 - [x] Contenu 100 % déclaratif, aucun code tiers exécuté.
 - [x] Packs téléchargés à la demande depuis un catalogue statique, avec relecture par pull request. Le mécanisme de chargement est en place dès la v1.
+- [x] Catalogue communautaire dans `breach-game/packs`, signé à la publication, vérifié par le jeu avec une clé compilée (22/11/2026).
 - [x] Monorepo pnpm dans `breach-game/breach`, dépôt `packs` séparé créé à l'ouverture communautaire.
 - [x] Passerelle sur Cloudflare Workers, après la v1.

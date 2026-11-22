@@ -255,9 +255,13 @@ On commence par une tranche verticale très belle et très courte, puis on élar
 - [x] Langues : français et anglais dès la v1.
 - [x] Licence : open source sous MIT.
 - [x] Hébergement : service statique gratuit (Cloudflare Pages ou GitHub Pages).
+- [x] Périmètre de la v1 : missions 0 à 3, PNJ scriptés et BYOK, desktop uniquement. Les missions 4 à 6, la passerelle LLM et WebLLM viennent après (22 nov. 2026).
+- [x] Blue Team : un débrief court en fin de chaque mission. Le mode Blue Team complet vient après la v1 (22 nov. 2026).
+- [x] Flags : soumission explicite par le joueur (22 nov. 2026).
+- [x] Missions au format de packs déclaratifs, chargés à la demande. Voir la [revue](../review/revue-gdd-2026-11.md) et l'[architecture](../architecture/architecture.md) (22 nov. 2026).
 
 **Encore ouvert**
 
 - [ ] Le nom de domaine : `breachgame.fr` ou `breachgame.dev` (voir Architecture).
 - [ ] Le quota par joueur sur la passerelle LLM gratuite.
-- [ ] Le choix du service pour la passerelle : VPS avec FreeLLMAPI, ou Cloudflare Workers.
+- [x] Le service pour la passerelle : Cloudflare Workers, après la v1 (22 nov. 2026).

@@ -7,15 +7,17 @@
 
 # BREACH · docs
 
-Documentation de conception du jeu BREACH.
+Design documentation for the game BREACH.
 
-| Document | Description |
-| --- | --- |
-| [Game Design Document](gdd/game-design-document.md) | Pitch, cadre, boucle de jeu, missions, terminal simulé, PNJ et IA, direction artistique, architecture, roadmap |
-| [Revue du GDD](review/revue-gdd-2026-11.md) | Revue critique avant développement : incohérences, risques, périmètre v1, décisions à prendre |
-| [Architecture (draft)](architecture/architecture.md) | Moteur à journal d'événements, format de packs de missions, niveaux communautaires, sécurité |
-| [Maquettes](mockups/) | Écran titre, bureau LR-OS, console Blue Team, carte réseau 3D, exfiltration 3D |
+Most documents were first written in French. Each one now has an English translation next to it; the French original stays the reference.
 
-Version vivante du GDD (avec les schémas) : https://claude.ai/artifact/LxRR4mbsTq5oRgqeECdhZj
+| Document | English | French (original) | Description |
+| --- | --- | --- | --- |
+| Game Design Document | [EN](gdd/game-design-document.en.md) | [FR](gdd/game-design-document.md) | Pitch, framework, game loop, missions, simulated terminal, NPCs and AI, art direction, architecture, roadmap |
+| GDD review | [EN](review/revue-gdd-2026-11.en.md) | [FR](review/revue-gdd-2026-11.md) | Critical review before development: inconsistencies, risks, v1 scope, decisions to make |
+| Architecture (draft) | [EN](architecture/architecture.en.md) | [FR](architecture/architecture.md) | Event-log engine, mission pack format, community levels, security |
+| [Mockups](mockups/) | | | Title screen, LR-OS desktop, Blue Team console, 3D network map, 3D exfiltration |
 
-L'identité visuelle complète est dans [`breach-game/.github`](https://github.com/breach-game/.github/tree/main/brand).
+Live version of the GDD (with diagrams, in French): https://claude.ai/artifact/LxRR4mbsTq5oRgqeECdhZj
+
+The full visual identity lives in [`breach-game/.github`](https://github.com/breach-game/.github/tree/main/brand).

@@ -1,6 +1,6 @@
 # Architecture de BREACH (draft)
 
-Nov 22, 2026 · draft v0, à discuter avant le lot 0. Il répond aux points de la [revue du GDD](../review/revue-gdd-2026-11.md).
+Nov 22, 2026 · draft v0, orientations validées par Marco le 22 novembre 2026. Il répond aux points de la [revue du GDD](../review/revue-gdd-2026-11.md).
 
 ## Principes
 
@@ -280,10 +280,23 @@ Garder les packs officiels dans le monorepo permet de faire évoluer moteur et c
 | Lot 5 | Le rejeu Blue Team s'appuie sur le journal, déjà en place |
 | Après v1 | Ouverture des packs communautaires : CLI public, dépôt `packs`, catalogue dans le jeu |
 
-## Décisions d'architecture à valider
+## Prêt pour de nouvelles missions dès la v1
 
-- [ ] Journal d'événements et moteur déterministe comme fondation (proposé).
-- [ ] Contenu 100 % déclaratif, aucun code tiers exécuté (proposé).
-- [ ] Packs téléchargés à la demande depuis un catalogue statique, avec relecture par pull request (proposé).
-- [ ] Monorepo pnpm dans `breach-game/breach`, dépôt `packs` séparé créé à l'ouverture communautaire (proposé).
-- [ ] Passerelle sur Cloudflare Workers, après la v1 (proposé).
+La v1 ne contient que les missions 0 à 3, mais ajouter une mission ne doit demander aucun changement dans le jeu. Cela impose quatre règles dès le lot 0 :
+
+1. **Aucune mission n'est codée en dur.** Les missions 0 à 3 sont des packs dans `content/`, compilés en `.breachpack` au build.
+2. **Un seul chemin de chargement.** Le jeu lit un `index.json` et charge les packs officiels exactement comme il chargera les packs communautaires (empreinte, validation, cache). L'écran « Missions » affiche ce que le catalogue contient.
+3. **Le schéma est versionné dès le premier pack** (`engine: ">=1.0 <2"`), avec le validateur et le rejeu de `solution.txt` en CI.
+4. **Ajouter la mission 4** revient à ajouter un dossier dans `content/` et une ligne dans la campagne. Si elle a besoin d'une nouvelle commande, celle-ci s'ajoute au registre du moteur.
+
+Les packs officiels restent dans le monorepo tant que le format bouge. Le dépôt `breach-game/packs` sera créé à l'ouverture communautaire (v1.x). Rien dans le jeu ne dépend de l'endroit où les packs sont hébergés : seule l'URL du catalogue change.
+
+## Décisions d'architecture
+
+Validées par Marco le 22 novembre 2026.
+
+- [x] Journal d'événements et moteur déterministe comme fondation.
+- [x] Contenu 100 % déclaratif, aucun code tiers exécuté.
+- [x] Packs téléchargés à la demande depuis un catalogue statique, avec relecture par pull request. Le mécanisme de chargement est en place dès la v1.
+- [x] Monorepo pnpm dans `breach-game/breach`, dépôt `packs` séparé créé à l'ouverture communautaire.
+- [x] Passerelle sur Cloudflare Workers, après la v1.

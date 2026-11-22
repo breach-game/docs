@@ -98,13 +98,15 @@ Trois sujets doivent être tranchés avant d'écrire du code, parce qu'ils chang
 
 Les missions 4 à 6 sont les plus fortes sur l'IA, donc il faut garder en tête qu'une v1 à 4 missions s'arrête juste avant le meilleur. L'alternative est de garder 0 à 5 et de reporter seulement la mission 6.
 
-## 8. Décisions à prendre
+## 8. Décisions prises
 
-- [ ] Blue Team : débrief court par mission + mode complet post-v1 (proposé), ou seconde campagne dès la v1 ?
-- [ ] Périmètre v1 : missions 0 à 3 (proposé) ou 0 à 5 ?
-- [ ] Validation des flags : soumission explicite par le joueur (proposé) ou détection automatique ?
-- [ ] Sorties des commandes en anglais et récit traduit (proposé) ?
-- [ ] Desktop uniquement en v1 (proposé) ?
-- [ ] Passerelle LLM dans la v1 ou après (proposé : après) ?
-- [ ] Ouverture des packs communautaires : v1.x, après 3 missions officielles écrites dans le format (proposé) ?
-- [ ] Public principal de la v1 : 16 à 25 ans (proposé) ou sensibilisation en entreprise ?
+Validées par Marco le 22 novembre 2026.
+
+- [x] **Blue Team** : débrief court en fin de chaque mission pour démarrer. Le mode Blue Team complet viendra après la v1.
+- [x] **Périmètre v1** : missions 0 à 3. Le jeu doit cependant être prêt dès la v1 à accepter facilement de nouvelles missions, avec le format de packs décrit dans l'architecture.
+- [x] **Validation des flags** : soumission explicite par le joueur (`submit FLAG{...}`), et vérification des appels d'outils pour les agents.
+- [x] **Langue** : sorties des commandes en anglais, récit et aides traduits.
+- [x] **Plateforme** : desktop uniquement en v1.
+- [x] **Passerelle LLM** : après la v1. La v1 propose les PNJ scriptés et le BYOK.
+- [x] **Packs communautaires** : ouverture en v1.x, une fois 3 missions officielles écrites dans le format.
+- [x] **Public principal de la v1** : les 16 à 25 ans curieux de cyber.

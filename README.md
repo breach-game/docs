@@ -7,7 +7,9 @@
 
 # BREACH · docs
 
-Design documentation for the game BREACH.
+Design documentation for [BREACH](https://github.com/breach-game/breach), a cybersecurity thriller that runs in your browser: you attack a fictional AI startup under contract, then replay every step as the defender.
+
+**Play:** https://breach-game.github.io/breach/ · **Code:** [breach-game/breach](https://github.com/breach-game/breach) · **Community missions:** [breach-game/packs](https://github.com/breach-game/packs)
 
 Most documents were first written in French. Each one now has an English translation next to it; the French original stays the reference.
 
@@ -21,3 +23,11 @@ Most documents were first written in French. Each one now has an English transla
 Live version of the GDD (with diagrams, in French): https://claude.ai/artifact/LxRR4mbsTq5oRgqeECdhZj
 
 The full visual identity lives in [`breach-game/.github`](https://github.com/breach-game/.github/tree/main/brand).
+
+## Contributing
+
+Questions and suggestions about the design are welcome as [issues](https://github.com/breach-game/docs/issues). When you change a document, update both languages: the French file stays the reference, and its English translation sits next to it as `<name>.en.md`. Everyone taking part follows the [Code of Conduct](https://github.com/breach-game/.github/blob/main/CODE_OF_CONDUCT.md).
+
+## Licence
+
+The documents and mockups in this repository are © 2026 Marco Mornati and released under the [Creative Commons Attribution 4.0 International licence](LICENSE) (CC BY 4.0): you can share and adapt them, including commercially, as long as you credit "BREACH (breach-game)" with a link to this repository. The game's code is under the MIT licence in [breach-game/breach](https://github.com/breach-game/breach).

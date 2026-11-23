@@ -63,7 +63,9 @@ Le fil rouge : à partir de la mission 4, le joueur trouve des traces qui ne son
 | 5 | Trop de pouvoir | Agent trop privilégié, escalade | Pousser un agent interne à utiliser un outil avec des droits admin | Moindre privilège, confirmations, périmètre des outils |
 | 6 | Sur les traces de Mute | Mouvement latéral, exfiltration | Suivre Mute de machine en machine, lire les logs, comprendre ce qui est parti | Segmentation, détection, réponse à incident |
 
-L'épilogue génère le rapport de pentest du joueur à partir de ses actions réelles en jeu. Il débloque aussi la campagne complète en mode Blue Team.
+L'épilogue génère le rapport de pentest du joueur à partir de ses actions réelles en jeu.
+
+**État au 23/11/2026.** La campagne compte dix missions : les sept ci-dessus, chacune suivie d'un rejeu défense (retrouver ses lignes dans les journaux, choisir la règle de détection, puis le correctif), et trois missions Blue Team où le joueur tient le SOC face à un attaquant scripté (7 « Mute revient », 8 « Atlas sous influence », 9 « La clé du partenaire »). Hors campagne : quatre entraînements d'une technique chacun, la saison 2 chez Halcyon (chaîne de fabrication, confusion de dépendances), et les missions de la communauté, dont neuf « Dossiers » inspirés d'incidents réels documentés publiquement, joués dans une entreprise fictive et clos par une fiche sourcée. Une mission ne se gagne plus seulement avec des flags : réparation de fichier, questions à choix multiples, réponses courtes.
 
 ## Terminal simulé
 

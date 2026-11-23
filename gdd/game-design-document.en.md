@@ -67,7 +67,7 @@ The main thread: from mission 4 onwards, the player finds traces that are not th
 
 The epilogue generates the player's pentest report from their actual in-game actions.
 
-**Status on 2026-11-23.** The campaign has ten missions: the seven above, each followed by a defence replay (find your lines in the logs, pick the detection rule, then the fix), and three Blue Team missions where the player runs the SOC against a scripted attacker (7 "Mute returns", 8 "Atlas under influence", 9 "The partner's key"). Outside the campaign: four trainings of one technique each, season 2 at Halcyon (build chain, dependency confusion), and community missions, among them nine "case files" inspired by publicly documented incidents, played at a fictional company and closed by a sourced card. A mission is no longer won with flags only: file repair, multiple choice questions, short answers.
+**Status on 2026-11-23.** The campaign has ten missions: the seven above, each followed by a defence replay (find your lines in the logs, pick the detection rule, then the fix), and three Blue Team missions where the player runs the SOC against a scripted attacker (7 "Mute returns", 8 "Atlas under influence", 9 "The partner's key"). Outside the campaign: four trainings of one technique each, season 2 at Halcyon (build chain, dependency confusion), and community missions, among them twelve "case files" inspired by publicly documented incidents, played at a fictional company and closed by a sourced card. A mission is no longer won with flags only: file repair, multiple choice questions, short answers.
 
 ## Simulated terminal
 

@@ -301,7 +301,8 @@ What was built when the community opened:
 - **The official packs stay in `breach`, pinned in the build.** Community packs never replace them: a community catalogue cannot list a `breach.*` id or a campaign.
 - **The game** lists community missions on its title screen, downloads the catalogue only then, checks its signature against a public key compiled into the build (also from cache), ignores a copy older than the last one seen, then checks each pack's SHA-256 and runs the schema and safety checks. A community mission is played on its own, with its own save, in an official world (NovaMind or a season's world) or in a community world.
 - **Community ids** are `<author>.<pack>`. Changing a published pack means raising its version.
-- **Not done yet:** importing a local `.breachpack` file in the published game, a "report" button, a visual editor.
+- **Import from a file** (23/11/2026): `breach-pack bundle` gathers packs and their solutions; the game redoes the CI checks in the browser, keeps the file on the player's machine and shows it with the "Not reviewed" badge.
+- **Not done yet:** a "report" button, a visual editor.
 
 ### Defence side (2026-11-22)
 
@@ -349,6 +350,28 @@ What these additions have in common:
 - **New protocols reuse routes.** The storage and identities of the fictional cloud are web routes; a message broker is a host whose routes are topics. `mqtt` goes through the same scope gate as `curl`, never stays subscribed and leaves its own log line.
 - **A path between seasons.** The title screen suggests the next step (resume, start the next season), and what is new is decided on the player's machine, with no tracking.
 - **A thread running through, as data.** Each world of seasons 3 to 8 serves a `/m.txt` route, Mute's calling card; their parts spell the name of the account the finale has the player close. Mute is never named or arrested: attribution goes to a signature, not to a person.
+
+### Content expansion (24/11/2026)
+
+After season 9, a plan listed the coverage gaps (enterprise identity, patching, session theft, email, containers, mobile, host forensics, resilience with no attacker, AI governance) and filled them with two engine lots and community content.
+
+| Version | Engine additions |
+| --- | --- |
+| 0.12 | Paths (`kind: path`, 3 to 20 steps to official or community missions) and levels allowed per pack (`levels: [expert]`, the engine falls back to the nearest allowed level) |
+| 0.13 (lot A) | Non-text files described as data (`$binary`, `$archive`, `$cert`), `strings`, `file`, `unzip`, `tar`, `openssl x509` and `dgst`, `hashid`, `sbom [--vuln]` with fictional advisories, `mailhdr`, threshold rules (`count`, `within`, `by`), a `call` channel to a character with a fictional number |
+| 0.14 (lot B) | What a machine runs (`ps`, `ss`, `systemctl`, `journalctl`, `last`), `flows` (the firewall log summed up), read-only `kubectl get/describe/logs`, `ldapsearch` on a directory described as data, releases (`deploy`, `rollback`, `flag set`), `timelines` and `paths` objectives |
+| 0.15, 0.16 | Binary members inside an archive (mobile app), the `mobile` skill, a `directory.anonymous` condition a fix can close |
+
+The content, all in `breach-game/packs` except the trainings:
+
+- **Case files 13 to 32.** Twenty new series inspired by real incidents (Okta, Replit, Air Canada, Polyfill, Samsung, LastPass, tj-actions, Equifax, 23andMe, Snowflake, Arup, CrowdStrike, Log4Shell, Heartbleed, MOVEit, Storm-0558, SolarWinds, Mirai, Oldsmar, NotPetya). High-risk cases are played on the defence side only, from a victim's seat: inventory, detection rule, containment, rebuild, with no reusable attack chain. The Oldsmar card says the facts have since been disputed.
+- **Nine fictional side series**: The look-alike domain, The Friday patch, The Vault, Bench 42, Black Tuesday, Orchestra (Kubernetes), The App (mobile), Shadow AI, The Directory.
+- **Challenges**: six missions in Expert only (`levels: [expert]`), with no Ada and no hint.
+- **First steps and paths**: a difficulty-1 collection and four paths (First steps, OWASP Web, OWASP LLM, SOC), shown in the community store.
+- **Twelve official trainings** (`content/trainings/`), one per tool added since season 3.
+- **Author kit**: `CONTRIBUTING.md` updated for every new format.
+
+CI replayed every mission in each language, and each one was played end to end in the browser before it was merged.
 
 ## Architecture decisions
 

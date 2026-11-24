@@ -373,6 +373,35 @@ The content, all in `breach-game/packs` except the trainings:
 
 CI replayed every mission in each language, and each one was played end to end in the browser before it was merged.
 
+
+### The house, APIs and case files 33 to 40 (2026-11-24)
+
+A coverage check listed what was still missing: the connected home and personal security, APIs, and a few very well known real incidents. Two official seasons and a new wave of community content cover them.
+
+| Version | Engine additions |
+| --- | --- |
+| 0.17 | `nmcli device wifi list` (the `wifi` table of the world and of the mission: the passive list seen from the workstation, "locally administered" hardware addresses, an `if` condition a fix can flip, no capture and no connection), `sms` (the `sms` inbox, the kind of sender and the site each link opens), the `debrief.home` card "To do at home" |
+
+| Season | World | Subject | What it uses |
+| --- | --- | --- | --- |
+| 10 | The Lemerle family home | A weekend at a family's house, on the defence side with the agreement of the people who live there: network inventory, router and Wi-Fi settings, a camera opened by a reused password, a Zigbee and Z-Wave hub, text message scams and a cloned voice, the mailbox and a forwarding rule, a smart plug that talks at night | 0.17, `mqtt`, `call`, `flows`, a rule written by the player. The world follows the file the player fixes (`{ file, contains }` conditions on routes and on the `wifi` table) |
+| 11 | Comptoir, a neobank | The classes of the OWASP API Security Top 10: a version retired on paper, an account served without checking its owner, a text message code with no attempt limit, a request to an internal address, an OAuth return address compared with "contains", a referral programme stormed by valid requests | no addition: `unzip`, `strings`, a threshold rule `by: path`, `flag set`, `timeline`, a decision |
+
+What both seasons keep to:
+
+- **No real device model, no radio command.** The player reads what the hub publishes on its `mqtt` topics (pairing left open, a lock paired without encryption); nothing is transmitted or captured.
+- **Numbers and addresses reserved for fiction.** The schema refuses any phone number outside the fictional ranges and any hardware address that could belong to a manufacturer.
+- **The consent and notification servers are scripted characters.** They recognise the shape of a request, never a payload; the proof is made on a test account, the real customer costs noise.
+- **Things to do again at home.** Every debrief of season 10 carries a `debrief.home` card.
+
+The community content, in `breach-game/packs`:
+
+- **Case files 33 to 40.** Eight defence-side series inspired by real incidents: Ring, British Airways, Optus, Target, Verkada, Twilio (0ktapus), Colonial Pipeline, MyEtherWallet (BGP hijack). Each card states only what the sources read say.
+- **Three fictional side series**, twelve in all: The Badge (physical security: a held door, a lost badge, a USB stick found), The Weights (AI security: model weights in an open bucket, a browsing agent that reads a booby-trapped page, a confident wrong answer, consumption with no cap), The Tag (being tracked by someone close, seen only from the side of the person tracked, on their own devices and with their agreement, with no surveillance technique; the "To do at home" cards point to helplines).
+- **Three Challenges**, nine in all: an origin allowed too widely (CORS), an uploaded file that is not a picture, a token issued for another application.
+- **A fifth path**, "Securing your home": two trainings, season 10, four case files and The Tag.
+- **Author kit**: `CONTRIBUTING.md` describes `wifi`, `sms` and `debrief.home`.
+
 ## Architecture decisions
 
 Approved by Marco on November 22, 2026.

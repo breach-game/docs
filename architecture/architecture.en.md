@@ -420,6 +420,24 @@ The content:
 
 What deliberately does not exist: no fake access point built by the player, no disconnection, no key cracking, no live capture. Travellers' devices are seen, never touched.
 
+### Third lot: clipboard, apps made with an AI (24/11/2026)
+
+A third coverage analysis looked for what was still missing. Marco approved its recommendations: one last targeted lot, then quality.
+
+| Version | Engine additions |
+| --- | --- |
+| 0.19 | page block `copy` (a text put in the game's clipboard, never the real one) and `clip` (with `xclip -o`, `xsel -b -o`, `pbpaste`, `wl-paste`) that shows it without running anything; the copied text must be a fictional tool of the world (shells, downloads, encodings and pipes are refused); `$image` read by `exiftool` (`-gps:all=`, `-all=`, `<file>_original`); host cache `cdn` and route `loose` (web cache deception); `curl -Z` and a character's `serial` condition (the race); log source `signin` for an identity provider; `bcc` field of the `mail` log |
+
+The content:
+
+- **Trainings 14 and 15**: what a photo says (`exiftool`), an AI assistant's share link.
+- **Side series The Clipboard** (ClickFix, defence side): a third-party widget's fake check, what it put in the clipboard read with `clip`, the machines that pasted it, a rule on the command line, then a content policy judged by `verify`.
+- **Case files 41 to 46**: Salesloft Drift (a connector's tokens), the first malicious MCP server (postmark-mcp), McHire's test account (audit under mandate), the fake remote hire (KnowBe4), device code phishing (Storm-2372), the hijacked browser extension (Cyberhaven).
+- **Two challenges**: the deceived cache and the race (a gift card credited twice).
+- **Season 12, "The prototype"**, official and with no new engine feature: Coup de main, a help app written in a weekend with a coding assistant. The database's public key and schema served to all, profiles readable for lack of row rules (CVE-2025-48757 facts card), an administrator demo account, a shared conversation holding the service key, reviewing the generated code, then row rules written in a file the database follows, and a decision on telling the neighbours.
+
+Left aside: ConnectWise (facts still moving), Shai-Hulud (duplicates Halcyon), and still XXE, deserialisation, SSTI and request smuggling (too close to a payload).
+
 ## Architecture decisions
 
 Approved by Marco on November 22, 2026.

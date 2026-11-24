@@ -418,6 +418,24 @@ Le contenu :
 
 Ce qui n'existe pas, volontairement : aucun faux point d'accès construit par le joueur, aucune déconnexion, aucun cassage de clé, aucune capture en direct. Les appareils des voyageurs se voient et ne se touchent pas.
 
+### Troisième lot : presse-papiers, applis faites avec une IA (24/11/2026)
+
+Une troisième analyse de couverture a cherché ce qui manquait encore. Marco a validé ses recommandations : un dernier lot ciblé, puis la qualité.
+
+| Version | Ajouts au moteur |
+| --- | --- |
+| 0.19 | bloc de page `copy` (un texte mis dans le presse-papiers du jeu, jamais le vrai) et `clip` (avec `xclip -o`, `xsel -b -o`, `pbpaste`, `wl-paste`) qui l'affiche sans rien exécuter ; le texte copié doit être un faux outil du monde (refus des shells, téléchargements, encodages et tubes) ; `$image` lue par `exiftool` (`-gps:all=`, `-all=`, `<fichier>_original`) ; cache d'hôte `cdn` et route `loose` (le cache trompeur) ; `curl -Z` et condition `serial` d'un personnage (la course) ; journal `signin` d'un fournisseur d'identité ; champ `bcc` du journal `mail` |
+
+Le contenu :
+
+- **Entraînements 14 et 15** : ce que dit une photo (`exiftool`), un lien de partage d'un assistant IA.
+- **Hors-série Le Presse-papiers** (ClickFix, côté défense) : la fausse vérification d'un widget tiers, ce qu'elle a mis dans le presse-papiers lu avec `clip`, les postes qui l'ont collé, une règle sur la ligne de commande, puis la politique de contenu jugée par `verify`.
+- **Dossiers 41 à 46** : Salesloft Drift (jetons d'un connecteur), le premier serveur MCP malveillant (postmark-mcp), le compte de recette de McHire (audit sous mandat), le faux employé recruté à distance (KnowBe4), l'hameçonnage par code d'appareil (Storm-2372), l'extension de navigateur détournée (Cyberhaven).
+- **Deux défis** : le cache trompeur et la course (une carte cadeau créditée deux fois).
+- **Saison 12, « Le prototype »**, officielle et sans moteur nouveau : Coup de main, une appli d'entraide écrite en un week-end avec un assistant de code. Clé publique de la base et schéma servis à tous, profils lisibles faute de règles par ligne (fiche CVE-2025-48757), compte de démo administrateur, conversation partagée qui contient la clé de service, relecture du code généré, puis règles par ligne écrites dans un fichier que la base suit, et décision pour prévenir les voisins.
+
+Laissés de côté : ConnectWise (faits encore mouvants), Shai-Hulud (doublon de Halcyon), et toujours XXE, désérialisation, SSTI et contrebande de requêtes (trop proches d'un payload).
+
 ## Décisions d'architecture
 
 Validées par Marco le 22 novembre 2026.

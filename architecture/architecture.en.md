@@ -299,7 +299,7 @@ What was built when the community opened:
 
 - **`breach-game/packs`** holds one folder per community pack, the guide for authors (`CONTRIBUTING.md`) and two workflows. `check.yml` runs the game's own validator (`breach-pack check --community --with content`, from `breach-game/breach` main) on every pull request and every night: schema, safety rules, translations, replay of `solution.txt` in each declared language. `publish.yml` runs after a merge: it builds the `.breachpack` files and `index.json`, **signs `index.json`** (ECDSA P-256, key in the `BREACH_SIGNING_KEY` secret) and publishes data files only on GitHub Pages.
 - **The official packs stay in `breach`, pinned in the build.** Community packs never replace them: a community catalogue cannot list a `breach.*` id or a campaign.
-- **The game** lists community missions on its title screen, downloads the catalogue only then, checks its signature against a public key compiled into the build (also from cache), ignores a copy older than the last one seen, then checks each pack's SHA-256 and runs the schema and safety checks. A community mission is played on its own, with its own save, in the official NovaMind world or in a community world.
+- **The game** lists community missions on its title screen, downloads the catalogue only then, checks its signature against a public key compiled into the build (also from cache), ignores a copy older than the last one seen, then checks each pack's SHA-256 and runs the schema and safety checks. A community mission is played on its own, with its own save, in an official world (NovaMind or a season's world) or in a community world.
 - **Community ids** are `<author>.<pack>`. Changing a published pack means raising its version.
 - **Not done yet:** importing a local `.breachpack` file in the published game, a "report" button, a visual editor.
 
@@ -307,7 +307,7 @@ What was built when the community opened:
 
 What was built so that every attack has its counter:
 
-- **Telemetry.** The engine derives log lines from events, in the real tool's format (`access`, `auth`, `chat`, `agent`, `dns`, `ids`, `audit`, `git`, `db`, `flow`), with the true source address even through SSH hops, plus deterministic background traffic declared in the world or the mission. Every new network command must declare the telemetry it leaves.
+- **Telemetry.** The engine derives log lines from events, in the real tool's format (`access`, `auth`, `chat`, `agent`, `dns`, `ids`, `audit`, `git`, `db`, `flow`, `mail`, `mqtt`), with the true source address even through SSH hops, plus deterministic background traffic declared in the world or the mission. Every new network command must declare the telemetry it leaves.
 - **Weaknesses as data.** The chosen form is simpler than the example above: a `config` of keys in the world or the mission, and the condition `{ config, eq }` on a character's intent, a commit, a flag or an attacker step. A fix or a containment is a `sets` on those keys, logged as `ConfigPatched`.
 - **Defence replay of an attack mission** (`defense` block). After the debrief, the player finds their own lines, picks the detection rule (Sigma-like, with a per-source threshold) and the fix. The engine replays the player's attack in two sandboxes built from the journal, without and with the fix, and compares what it gains. A flag only counts in the replay if it first appeared in an output. The replay is required to move on in the campaign, and its points add to the score.
 - **Defence missions** (`side: defense`). A scripted attacker moves one step every `pace` player commands; the player reads logs (`soc`), contains (`contain`, with a business impact cost) and answers the investigation (`answer`, checked by hash). If the attacker reaches its goal, `mission.fail` sends the player back to the last checkpoint. Three Blue Team missions follow the attack campaign. A step of the attacker that a containment refused leaves a `flow: deny` line in the logs.
@@ -323,9 +323,32 @@ The pack format grew with the content, and still holds no code:
 - **A flag must have been shown.** The engine records every `FLAG{…}` that appears in a command output, a page, a reply or an opened file (`FlagShown` event), and `submit` refuses the others, with no penalty. What the player types does not count. Since packs are public, this stops a mission from being finished by copying its solution.
 - **Series** (`kind: series`). A pack that chains 2 to 12 missions of one world in a single save: what the player did in one mission still exists in the next. The validator replays the solutions in a row, in one game.
 - **"What really happened" card** (`debrief.facts`). After the fiction, a mission can tell the real incident it is inspired by, with its sources. It is the only place where a pack may write a real domain (plain `https`, shown as text, never as a link), and no private person is named. The "case files" of the `packs` repository are series built on this model.
-- **Seasons** (`track: season`). Official series played outside the campaign, each in its own official world and its own save. The catalogue lists them apart. The NovaMind campaign is season 1; season 2 takes place at Halcyon.
+- **Seasons** (`track: season`). Official series played outside the campaign, each in its own official world and its own save. The catalogue lists them apart. The NovaMind campaign is season 1; season 2 takes place at Halcyon. Seasons 3 to 9 are described further down.
 - **Trainings** (`track: training`). Short official missions, one technique each, always open, with `difficulty` and `skills`.
 - **Progress.** A save records the version of the world and of each mission. If an update changes either, finished missions are carried over with their score and their defence points (`ProgressCarried`), and the mission in progress starts again. The same event imports a progress file, read as untrusted input.
+
+### Seasons 3 to 9 (2026-11-24)
+
+Seven seasons followed Halcyon, each in its own world (`content/worlds/<name>`) and shipped with the engine additions it needed. None of them accepts code: everything stays data read by the engine, and no model judges.
+
+| Season | World | Subject | Engine additions |
+| --- | --- | --- | --- |
+| 3 | Pélican, an online shop | Classic web flaws | 0.6: page blocks `form` and `table`, input shapes on an intent (`input: quote, markup, negative`), route `variants` (cookie, header), `jq`, `jwt decode`, code review (`reviews`, `review`) |
+| 4 | Town of Corbelle | Ransomware, defence only | 0.7: decisions (a question with no right answer, `impact`, `sets`, the `choice` condition), `crontab -l`, measures `remove`, `restore`, `rotate` that rewrite or delete files, rules written by the player (`hunts`, `rule test`), a `startTime` per mission |
+| 5 | Sélène, teams of AI agents | Shared index, poisoned memory, invented package, impersonation between agents | 0.8: guardrails written by the player (`evals`, `eval run`), the `|gte` modifier |
+| 6 | Alto, on a fictional cloud | Public storage, pipeline token, role too wide, consent | 0.9: a route variant with a condition alone |
+| 7 | Festival Lumière Noire | Bug bounty, disclosure, phishing | 0.10: the `mail` log |
+| 8 | Verdure, a vertical farm | Connected devices | 0.11: the `mqtt sub|pub` command (a topic is a route of a host that carries an `mqtt` service), the `mqtt` log |
+| 9 | Ligne Rouge | Finale: Mute logs in at the firm through an account never closed | none: the finale only uses what exists |
+
+What these additions have in common:
+
+- **Recognise a class of flaw, never a payload.** A form is a scripted character without a face; an intent can require a shape of input (a quote, a tag, a negative number), not an exact string. The pack safety check still refuses `<script`, `javascript:` and `on…=` attributes.
+- **The player writes, the engine counts.** A detection rule passes when it alerts on every targeted line of the attacker and on no line of ordinary activity (`runDetection`). An agent guardrail passes when it blocks every case to block and no legitimate case (`runEval`). The cases are data: nothing is run.
+- **Decisions with no right answer.** Each option has a price (`impact`) and stays recorded in the state for the whole save; a later mission of the series reads it (`choice`), which gives branching endings. The validator replays the solution once per option.
+- **New protocols reuse routes.** The storage and identities of the fictional cloud are web routes; a message broker is a host whose routes are topics. `mqtt` goes through the same scope gate as `curl`, never stays subscribed and leaves its own log line.
+- **A path between seasons.** The title screen suggests the next step (resume, start the next season), and what is new is decided on the player's machine, with no tracking.
+- **A thread running through, as data.** Each world of seasons 3 to 8 serves a `/m.txt` route, Mute's calling card; their parts spell the name of the account the finale has the player close. Mute is never named or arrested: attribution goes to a signature, not to a person.
 
 ## Architecture decisions
 

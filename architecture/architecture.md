@@ -297,7 +297,7 @@ Ce qui a été construit à l'ouverture :
 
 - **`breach-game/packs`** contient un dossier par pack communautaire, le guide des auteurs (`CONTRIBUTING.md`, en anglais) et deux workflows. `check.yml` lance le validateur du jeu lui-même (`breach-pack check --community --with content`, pris sur `main` de `breach-game/breach`) à chaque pull request et chaque nuit : schéma, règles de sécurité, traductions, rejeu de `solution.txt` dans chaque langue déclarée. `publish.yml` tourne après une fusion : il construit les `.breachpack` et `index.json`, **signe `index.json`** (ECDSA P-256, clé dans le secret `BREACH_SIGNING_KEY`) et ne publie que des fichiers de données sur GitHub Pages.
 - **Les packs officiels restent dans `breach`, épinglés au build.** Un pack communautaire ne les remplace jamais : un catalogue communautaire ne peut lister ni id `breach.*` ni campagne.
-- **Le jeu** liste les missions communautaires sur l'écran titre, ne télécharge le catalogue qu'à ce moment, vérifie sa signature avec une clé publique compilée dans le build (aussi depuis le cache), ignore une copie plus ancienne que la dernière vue, puis vérifie l'empreinte de chaque pack et applique le schéma et les contrôles de sécurité. Une mission communautaire se joue seule, avec sa propre sauvegarde, dans le monde officiel NovaMind ou dans un monde communautaire.
+- **Le jeu** liste les missions communautaires sur l'écran titre, ne télécharge le catalogue qu'à ce moment, vérifie sa signature avec une clé publique compilée dans le build (aussi depuis le cache), ignore une copie plus ancienne que la dernière vue, puis vérifie l'empreinte de chaque pack et applique le schéma et les contrôles de sécurité. Une mission communautaire se joue seule, avec sa propre sauvegarde, dans un monde officiel (NovaMind ou celui d'une saison) ou dans un monde communautaire.
 - **Les id communautaires** sont de la forme `<auteur>.<pack>`. Modifier un pack publié impose d'augmenter sa version.
 - **Pas encore fait :** import d'un fichier `.breachpack` local dans le jeu publié, bouton « signaler », éditeur visuel.
 
@@ -305,7 +305,7 @@ Ce qui a été construit à l'ouverture :
 
 Ce qui a été construit pour que chaque attaque ait sa parade :
 
-- **Télémétrie.** Le moteur dérive des événements des lignes de log au format de l'outil réel (`access`, `auth`, `chat`, `agent`, `dns`, `ids`, `audit`, `git`, `db`, `flow`), avec la vraie adresse source même à travers les rebonds SSH, plus un trafic de fond déterministe déclaré dans le monde ou la mission. Toute nouvelle commande réseau doit déclarer la télémétrie qu'elle laisse.
+- **Télémétrie.** Le moteur dérive des événements des lignes de log au format de l'outil réel (`access`, `auth`, `chat`, `agent`, `dns`, `ids`, `audit`, `git`, `db`, `flow`, `mail`, `mqtt`), avec la vraie adresse source même à travers les rebonds SSH, plus un trafic de fond déterministe déclaré dans le monde ou la mission. Toute nouvelle commande réseau doit déclarer la télémétrie qu'elle laisse.
 - **Failles en données.** La forme retenue est plus simple que l'exemple ci-dessus : une `config` de clés booléennes dans le monde ou la mission, et la condition `{ config, eq }` posée sur une intention de personnage, un commit, un flag ou une étape d'attaquant. Un correctif ou un confinement est un `sets` sur ces clés, journalisé par `ConfigPatched`.
 - **Rejeu défense d'une mission d'attaque** (bloc `defense`). Après le débrief, le joueur retrouve ses propres lignes, choisit la règle de détection (format proche de Sigma, avec seuil par adresse source) et le correctif. Le moteur rejoue l'attaque du joueur dans deux bacs à sable construits depuis le journal, sans puis avec le correctif, et compare ce qu'elle obtient. Un flag ne compte dans le rejeu que s'il est d'abord apparu dans une sortie. Le rejeu est obligatoire pour passer à la mission suivante de la campagne, et ses points s'ajoutent au score.
 - **Missions défense** (`side: defense`). Un attaquant scripté avance d'une étape toutes les `pace` commandes du joueur ; le joueur lit les journaux (`soc`), confine (`contain`, avec un coût d'impact métier) et répond aux questions de l'enquête (`answer`, vérifié par empreinte). Si l'objectif de l'attaquant est atteint, `mission.fail` ramène au dernier point de reprise. Trois missions Blue Team suivent la campagne d'attaque. Une étape de l'attaquant refusée par un confinement laisse une ligne `flow: deny` dans les journaux.
@@ -321,9 +321,32 @@ Le format des packs a grandi avec le contenu, sans jamais accueillir de code :
 - **Un flag doit avoir été montré.** Le moteur note chaque `FLAG{…}` qui apparaît dans une sortie de commande, une page, une réplique ou un fichier ouvert (événement `FlagShown`), et `submit` refuse les autres, sans pénalité. Ce que le joueur tape lui-même ne compte pas. Comme les packs sont publics, cela empêche de finir une mission en recopiant sa solution.
 - **Séries** (`kind: series`). Un pack qui enchaîne de 2 à 12 missions d'un même monde, dans une seule sauvegarde : ce que le joueur a fait dans une mission existe encore dans la suivante. Le validateur rejoue les solutions à la suite dans une seule partie.
 - **Fiche « ce qui s'est vraiment passé »** (`debrief.facts`). Après la fiction, une mission peut raconter l'incident réel dont elle s'inspire, avec ses sources. C'est le seul endroit où un pack peut écrire un vrai domaine (`https` simple, affiché en texte, jamais en lien), et aucune personne privée n'y est nommée. Les « Dossiers » du dépôt `packs` sont des séries construites sur ce modèle.
-- **Saisons** (`track: season`). Des séries officielles jouées hors de la campagne, chacune dans son propre monde officiel et sa propre sauvegarde. Le catalogue les liste à part. La campagne NovaMind est la saison 1 ; la saison 2 se passe chez Halcyon.
+- **Saisons** (`track: season`). Des séries officielles jouées hors de la campagne, chacune dans son propre monde officiel et sa propre sauvegarde. Le catalogue les liste à part. La campagne NovaMind est la saison 1 ; la saison 2 se passe chez Halcyon. Les saisons 3 à 9 sont décrites plus bas.
 - **Entraînements** (`track: training`). Des missions officielles courtes, une technique chacune, toujours ouvertes, avec `difficulty` et `skills`.
 - **Progression.** Une sauvegarde note la version du monde et de chaque mission. Si une mise à jour change l'un ou l'autre, les missions terminées sont reportées avec leur score et leurs points de défense (`ProgressCarried`), et la mission en cours reprend à son début. Le même événement sert à importer un fichier de progression, lu comme une entrée non fiable.
+
+### Saisons 3 à 9 (24/11/2026)
+
+Sept saisons ont suivi Halcyon, chacune dans son propre monde (`content/worlds/<nom>`) et livrée avec les ajouts au moteur dont elle avait besoin. Aucun n'accueille de code : tout reste des données lues par le moteur, et aucun modèle ne juge.
+
+| Saison | Monde | Sujet | Ajouts au moteur |
+| --- | --- | --- | --- |
+| 3 | Pélican, boutique en ligne | Failles classiques du web | 0.6 : blocs de page `form` et `table`, formes d'entrée d'une intention (`input: quote, markup, negative`), `variants` d'une route (cookie, en-tête), `jq`, `jwt decode`, relecture de code (`reviews`, `review`) |
+| 4 | Ville de Corbelle | Rançongiciel, tout en défense | 0.7 : décisions (question sans bonne réponse, `impact`, `sets`, condition `choice`), `crontab -l`, mesures `remove`, `restore`, `rotate` qui réécrivent ou suppriment des fichiers, règles écrites par le joueur (`hunts`, `rule test`), `startTime` par mission |
+| 5 | Sélène, équipes d'agents IA | Index partagé, mémoire empoisonnée, paquet inventé, usurpation entre agents | 0.8 : garde-fous écrits par le joueur (`evals`, `eval run`), modificateur `|gte` |
+| 6 | Alto, chez un cloud fictif | Stockage public, jeton de pipeline, rôle trop large, consentement | 0.9 : variante de route avec une condition seule |
+| 7 | Festival Lumière Noire | Bug bounty, divulgation, hameçonnage | 0.10 : journal `mail` |
+| 8 | Verdure, ferme verticale | Objets connectés | 0.11 : commande `mqtt sub|pub` (un sujet est une route d'un hôte qui porte un service `mqtt`), journal `mqtt` |
+| 9 | Ligne Rouge | Finale : Mute se connecte au cabinet par un compte jamais fermé | aucun : la finale n'utilise que l'existant |
+
+Ce que ces ajouts ont en commun :
+
+- **Reconnaître une classe de faille, jamais un payload.** Un formulaire est un personnage scripté sans visage ; une intention peut exiger une forme d'entrée (un guillemet, une balise, un nombre négatif), pas une chaîne précise. Le contrôle de sécurité des packs refuse toujours `<script`, `javascript:` et les attributs `on…=`.
+- **Le joueur écrit, le moteur compte.** Une règle de détection passe quand elle alerte sur chaque ligne visée de l'attaquant et sur aucune ligne de l'activité ordinaire (`runDetection`). Un garde-fou d'agent passe quand il bloque chaque cas à bloquer et aucun cas légitime (`runEval`). Les cas sont des données : rien n'est exécuté.
+- **Des décisions sans bonne réponse.** Chaque option a un prix (`impact`) et reste notée dans l'état pour toute la sauvegarde ; une mission suivante de la série la relit (`choice`), ce qui donne des fins à embranchements. Le validateur rejoue la solution une fois par option.
+- **Les protocoles nouveaux réutilisent les routes.** Le stockage et les identités du cloud fictif sont des routes web ; un courtier de messages est un hôte dont les routes sont des sujets. `mqtt` passe par la même garde de périmètre que `curl`, ne reste jamais abonné et laisse sa propre ligne de journal.
+- **Parcours entre les saisons.** L'écran titre propose la prochaine étape (reprendre, commencer la saison suivante), et les nouveautés se décident sur le poste du joueur, sans aucun suivi.
+- **Un fil rouge en données.** Chaque monde des saisons 3 à 8 sert une route `/m.txt`, la carte de visite de Mute ; leurs morceaux épellent le nom du compte que la finale fait fermer. Mute n'est ni nommé ni arrêté : on attribue à une signature, pas à une personne.
 
 ## Décisions d'architecture
 

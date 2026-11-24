@@ -400,6 +400,24 @@ Le contenu communautaire, dans `breach-game/packs` :
 - **Un cinquième parcours**, « Sécuriser sa maison » : deux entraînements, la saison 10, quatre Dossiers et La Pastille.
 - **Kit d'auteur** : `CONTRIBUTING.md` décrit `wifi`, `sms` et `debrief.home`.
 
+
+### Wi-Fi public et QR codes (24/11/2026)
+
+Une question de Marco : regarder ce que fait quelqu'un sur un Wi-Fi public, est-ce encore d'actualité ? Le plan a répondu honnêtement : lire le contenu est devenu rare (HTTPS couvre presque tout), mais le faux réseau qui demande un mot de passe, les métadonnées (DNS, SNI), les appareils qui parlent encore en clair, les autres clients du même réseau et les réflexes du voyageur restent réels. Les QR codes, partout et jamais relus, ont suivi.
+
+| Version | Ajouts au moteur |
+| --- | --- |
+| 0.18 | `$capture` (une capture déjà prise, paquets `dns`, `tls`, `quic`, `http`, `arp`, `dhcp`, `smb`, `tcp`, `udp`) relue par `tshark -r [-Y] [-V] [-q -z conv]` : le chiffré n'existe que par sa taille, aucune capture en direct ; `$qr` (l'image d'un QR code) lue par `qr decode` et `zbarimg`, dessinée par `qr show` dans une visionneuse d'images (SVG, lisible par un téléphone) ; `nmcli connection show|delete|modify` sur les réseaux mémorisés du poste ; journal `wlan` d'un contrôleur Wi-Fi (`managed`) ; champ `attach` du journal `mail` ; carte `debrief.home` avec `kind: travel` (« À faire en déplacement ») |
+
+Le contenu :
+
+- **Entraînement 13**, « Ce qui passe en clair » : lire la capture d'un Wi-Fi invités.
+- **Hors-série L'Étiquette** (QR codes, côté défense) : autocollant sur des horodateurs, colis qui fait installer une appli, mail sans lien avec une image de QR code, affiches de la ville dont le raccourcisseur a été racheté.
+- **Hors-série L'Escale** (Wi-Fi public, audit et défense) : la capture qui fait tomber le mythe, le faux réseau « 5G » vu dans le journal du contrôleur (fiche : l'affaire de la police fédérale australienne, 2024), les autres clients et l'isolation (qui se contourne, recherche AirSnitch 2026), puis les réseaux mémorisés et ce qu'apporte Enhanced Open.
+- **Parcours « En déplacement »** : t13, les deux hors-série, t04 et le Dossier 38.
+
+Ce qui n'existe pas, volontairement : aucun faux point d'accès construit par le joueur, aucune déconnexion, aucun cassage de clé, aucune capture en direct. Les appareils des voyageurs se voient et ne se touchent pas.
+
 ## Décisions d'architecture
 
 Validées par Marco le 22 novembre 2026.

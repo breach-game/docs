@@ -402,6 +402,24 @@ The community content, in `breach-game/packs`:
 - **A fifth path**, "Securing your home": two trainings, season 10, four case files and The Tag.
 - **Author kit**: `CONTRIBUTING.md` describes `wifi`, `sms` and `debrief.home`.
 
+
+### Public Wi-Fi and QR codes (24/11/2026)
+
+A question from Marco: is watching what someone does on a public Wi-Fi still current? The plan answered honestly: reading content has become rare (HTTPS covers almost everything), but the fake network that asks for a password, the metadata (DNS, SNI), devices that still talk in clear, the other guests on the same network and the traveller's habits are still real. QR codes, everywhere and never checked, came next.
+
+| Version | Engine additions |
+| --- | --- |
+| 0.18 | `$capture` (a capture already taken, packets `dns`, `tls`, `quic`, `http`, `arp`, `dhcp`, `smb`, `tcp`, `udp`) read by `tshark -r [-Y] [-V] [-q -z conv]`: encrypted traffic only exists through its size, no live capture; `$qr` (the picture of a QR code) read by `qr decode` and `zbarimg`, drawn by `qr show` in an image viewer (SVG, readable by a phone); `nmcli connection show|delete|modify` on the workstation's saved networks; `wlan` log of a wireless controller (`managed`); `attach` field of the `mail` log; `debrief.home` card with `kind: travel` ("To do on the road") |
+
+The content:
+
+- **Training 13**, "What travels in clear": reading a capture of a guest Wi-Fi.
+- **Side series The Sticker** (QR codes, defence side): a sticker on parking meters, a parcel that makes you install an app, a mail with no link but a QR picture, the town's posters whose shortener domain was bought again.
+- **Side series L'Escale** (public Wi-Fi, audit and defence): the capture that brings down the myth, the fake "5G" network seen in the controller's log (facts card: the Australian Federal Police case, 2024), the other guests and client isolation (which can be bypassed, AirSnitch research 2026), then saved networks and what Enhanced Open brings.
+- **Path "On the road"**: t13, both side series, t04 and case file 38.
+
+What deliberately does not exist: no fake access point built by the player, no disconnection, no key cracking, no live capture. Travellers' devices are seen, never touched.
+
 ## Architecture decisions
 
 Approved by Marco on November 22, 2026.

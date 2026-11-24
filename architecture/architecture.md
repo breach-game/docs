@@ -299,7 +299,8 @@ Ce qui a été construit à l'ouverture :
 - **Les packs officiels restent dans `breach`, épinglés au build.** Un pack communautaire ne les remplace jamais : un catalogue communautaire ne peut lister ni id `breach.*` ni campagne.
 - **Le jeu** liste les missions communautaires sur l'écran titre, ne télécharge le catalogue qu'à ce moment, vérifie sa signature avec une clé publique compilée dans le build (aussi depuis le cache), ignore une copie plus ancienne que la dernière vue, puis vérifie l'empreinte de chaque pack et applique le schéma et les contrôles de sécurité. Une mission communautaire se joue seule, avec sa propre sauvegarde, dans un monde officiel (NovaMind ou celui d'une saison) ou dans un monde communautaire.
 - **Les id communautaires** sont de la forme `<auteur>.<pack>`. Modifier un pack publié impose d'augmenter sa version.
-- **Pas encore fait :** import d'un fichier `.breachpack` local dans le jeu publié, bouton « signaler », éditeur visuel.
+- **Import depuis un fichier** (23/11/2026) : `breach-pack bundle` rassemble des packs et leurs solutions ; le jeu refait dans le navigateur les contrôles de la CI, garde le fichier sur le poste et l'affiche avec le badge « Non relue ».
+- **Pas encore fait :** bouton « signaler », éditeur visuel.
 
 ### Côté défense (22/11/2026)
 
@@ -347,6 +348,28 @@ Ce que ces ajouts ont en commun :
 - **Les protocoles nouveaux réutilisent les routes.** Le stockage et les identités du cloud fictif sont des routes web ; un courtier de messages est un hôte dont les routes sont des sujets. `mqtt` passe par la même garde de périmètre que `curl`, ne reste jamais abonné et laisse sa propre ligne de journal.
 - **Parcours entre les saisons.** L'écran titre propose la prochaine étape (reprendre, commencer la saison suivante), et les nouveautés se décident sur le poste du joueur, sans aucun suivi.
 - **Un fil rouge en données.** Chaque monde des saisons 3 à 8 sert une route `/m.txt`, la carte de visite de Mute ; leurs morceaux épellent le nom du compte que la finale fait fermer. Mute n'est ni nommé ni arrêté : on attribue à une signature, pas à une personne.
+
+### Élargissement du contenu (24/11/2026)
+
+Après la saison 9, un plan a relevé les manques de couverture (identité d'entreprise, correctifs, vol de session, messagerie, conteneurs, mobile, forensique de poste, résilience sans attaquant, gouvernance de l'IA) et les a comblés en deux lots moteur et du contenu communautaire.
+
+| Version | Ajouts au moteur |
+| --- | --- |
+| 0.12 | Parcours (`kind: path`, de 3 à 20 étapes vers des missions officielles ou communautaires) et niveaux permis par pack (`levels: [expert]`, le moteur ramène au plus proche permis) |
+| 0.13 (lot A) | Fichiers non textuels décrits en données (`$binary`, `$archive`, `$cert`), `strings`, `file`, `unzip`, `tar`, `openssl x509` et `dgst`, `hashid`, `sbom [--vuln]` avec des avis fictifs, `mailhdr`, règles à seuil (`count`, `within`, `by`), canal `call` vers un personnage qui a un numéro fictif |
+| 0.14 (lot B) | Ce que tourne une machine (`ps`, `ss`, `systemctl`, `journalctl`, `last`), `flows` (journal du pare-feu additionné), `kubectl get/describe/logs` en lecture seule, `ldapsearch` sur un annuaire en données, mises en production (`deploy`, `rollback`, `flag set`), objectifs `timelines` et `paths` |
+| 0.15, 0.16 | Membres binaires d'une archive (appli mobile), compétence `mobile`, condition `directory.anonymous` qu'un correctif peut fermer |
+
+Le contenu, tout dans `breach-game/packs` sauf les entraînements :
+
+- **Dossiers 13 à 32.** Vingt nouvelles séries inspirées d'incidents réels (Okta, Replit, Air Canada, Polyfill, Samsung, LastPass, tj-actions, Equifax, 23andMe, Snowflake, Arup, CrowdStrike, Log4Shell, Heartbleed, MOVEit, Storm-0558, SolarWinds, Mirai, Oldsmar, NotPetya). Les cas à risque élevé sont joués uniquement côté défense, depuis la place d'une victime : inventaire, règle de détection, confinement, reconstruction, sans aucune chaîne d'attaque réutilisable. La fiche d'Oldsmar dit que les faits ont été contestés depuis.
+- **Neuf hors-série fictifs** : Le Domaine sosie, Le Correctif du vendredi, Le Coffre, Le Poste 42, Le Mardi noir, Orchestre (Kubernetes), L'Appli (mobile), IA fantôme, L'Annuaire.
+- **Défis** : six missions en Expert seulement (`levels: [expert]`), sans Ada ni indice.
+- **Premiers pas et parcours** : une collection de difficulté 1 et quatre parcours (Premiers pas, OWASP Web, OWASP LLM, SOC), rangés dans le store communautaire.
+- **Douze entraînements** officiels (`content/trainings/`), un par outil ajouté depuis la saison 3.
+- **Kit d'auteur** : `CONTRIBUTING.md` à jour pour tous les nouveaux formats.
+
+Chaque mission a été rejouée par la CI dans chaque langue, puis jouée de bout en bout dans le navigateur avant d'être fusionnée.
 
 ## Décisions d'architecture
 
